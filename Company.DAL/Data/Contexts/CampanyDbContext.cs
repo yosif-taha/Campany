@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Company.DAL.Data.Contexts
 {
-    internal class CampanyDbContext : DbContext
+    public class CampanyDbContext : DbContext
     {
         public CampanyDbContext() : base() 
         {
