@@ -14,9 +14,9 @@ namespace Company.BLL.Repositories
     {
         //readonly: for connect with DB Only Once
        private readonly CampanyDbContext  _context;
-        public DepartmentRepository()
+        public DepartmentRepository(CampanyDbContext context)
         {
-            _context = new CampanyDbContext();  
+            _context = context;  
         }
 
         public IEnumerable<Department> GetAll()
