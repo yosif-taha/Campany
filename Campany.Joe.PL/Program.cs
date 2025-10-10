@@ -1,3 +1,8 @@
+using Company.BLL.Interfaces;
+using Company.BLL.Repositories;
+using Company.DAL.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
+
 namespace Campany.Joe.PL
 {
     public class Program
@@ -8,6 +13,12 @@ namespace Campany.Joe.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>(); //Allow DI For DepartmentRepository
+            builder.Services.AddDbContext<CampanyDbContext>(option =>
+            {
+                option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            }
+            );// Allow DI For CampanyDbContext
 
             var app = builder.Build();
 
@@ -24,7 +35,7 @@ namespace Campany.Joe.PL
 
             app.UseRouting();
 
-           
+
 
             app.MapControllerRoute(
                 name: "default",

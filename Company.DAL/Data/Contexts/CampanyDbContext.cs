@@ -11,16 +11,16 @@ namespace Company.DAL.Data.Contexts
 {
     public class CampanyDbContext : DbContext
     {
-        public CampanyDbContext() : base() 
+        public CampanyDbContext(DbContextOptions<CampanyDbContext> Options) : base(Options) 
         {
             
         }
 
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server = . ; Database = Campany ; Trusted_Connection = True; TrustServerCertificate = True ");
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Server = . ; Database = Campany ; Trusted_Connection = True; TrustServerCertificate = True ");
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
