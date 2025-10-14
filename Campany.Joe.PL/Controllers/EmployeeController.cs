@@ -28,7 +28,7 @@ namespace Campany.Joe.PL.Controllers
         [HttpPost] //Use when send data through form
         public IActionResult Create(CreateEmployeeDtos model)
         {
-            if (ModelState.IsValid) //ServerSide Validation To Props Inside CreateDepartmentDtos Class
+            if (ModelState.IsValid) //ServerSide Validation To Props Inside CreateEmployeeDtos Class
             {
                 var employee = new Employee() //Casting Model From "CreateDepartmentDtos" class To "Department" class 
                 {                                 //for save date of "model" in Our Database
