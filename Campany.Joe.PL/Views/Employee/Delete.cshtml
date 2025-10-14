@@ -9,54 +9,7 @@
 <br />
 
 <form asp-action="Delete">
-    <div class="my-3">
-        <label asp-for="Name" class="col-form-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name"></span>  @*Return Inside Of ErrorMessage*@
-    </div>
-    <div class="my-3">
-        <label asp-for="Age" class="col-form-label"></label>
-        <input asp-for="Age" class="form-control" />
-        <span asp-validation-for="Age"></span> @*Return Inside Of ErrorMessage*@
-    </div>
-    <div class="my-3">
-        <label asp-for="Email" class="col-form-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email"></span> @*Return Inside Of ErrorMessage*@
-    </div>
-    <div class="my-3">
-        <label asp-for="Address" class="col-form-label"></label>
-        <input asp-for="Address" class="form-control" />
-        <span asp-validation-for="Address"></span> @*Return Inside Of ErrorMessage*@
-    </div>
-    <div class="my-3">
-        <label asp-for="Phone" class="col-form-label"></label>
-        <input asp-for="Phone" class="form-control" />
-        <span asp-validation-for="Phone"></span> @*Return Inside Of ErrorMessage*@
-    </div>
-    <div class="my-3">
-        <label asp-for="Salary" class="col-form-label"></label>
-        <input asp-for="Salary" class="form-control" />
-        <span asp-validation-for="Salary"></span> @*Return Inside Of ErrorMessage*@
-    </div>
-    <div class="my-3">
-        <label asp-for="IsActive" class="col-form-label"></label>
-        <input asp-for="IsActive" class="form-check" />
-    </div>
-    <div class="my-3">
-        <label asp-for="IsDeleted" class="col-form-label"></label>
-        <input asp-for="IsDeleted" class="form-check" />
-    </div>
-    <div class="my-3">
-        <label asp-for="HiringDate" class="col-form-label"></label>
-        <input asp-for="HiringDate" class="form-control" />
-        <span asp-validation-for="HiringDate"></span> @*Return Inside Of ErrorMessage*@
-    </div>
-    <div class="my-3">
-        <label asp-for="CreateAt" class="col-form-label"></label>
-        <input asp-for="CreateAt" class="form-control" />
-        <span asp-validation-for="CreateAt"></span> @*Return Inside Of ErrorMessage*@
-    </div>
+    <partial name="EmployeePartialViews/_DeleteDetailsPartialView" />
     <div>
         <input type="submit" value="Delete" class="btn btn-danger" />
         <a asp-action="Index" class="btn btn-light">Back To List</a>

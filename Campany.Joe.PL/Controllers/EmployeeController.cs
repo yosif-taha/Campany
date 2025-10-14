@@ -67,22 +67,51 @@ namespace Campany.Joe.PL.Controllers
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-            //if (id == null) return BadRequest("Invalid Id");
-            //var department = _repository.Get(id.Value);
-            //if (department is null) return NotFound(new { StatusCode = 400, Message = $"Department With Id {id} Is Not Found" });
+            if (id == null) return BadRequest("Invalid Id");
+            var employee = _repository.Get(id.Value);
+            if (employee is null) return NotFound(new { StatusCode = 400, Message = $"Department With Id {id} Is Not Found" });
+            var employeeDto = new CreateEmployeeDtos() //Casting Model From "CreateDepartmentDtos" class To "Department" class 
+            {                                 //for save date of "model" in Our Database
+               
+                Name = employee.Name,
+                Age = employee.Age,
+                Salary = employee.Salary,
+                Address = employee.Address,
+                Email = employee.Email,
+                Phone = employee.Phone,
+                HiringDate = employee.HiringDate,
+                CreateAt = employee.CreateAt,
+                IsActive = employee.IsActive,
+                IsDeleted = employee.IsDeleted,
 
-            return Details(id, "Edit");
+            };
+            return View(employeeDto);
         }
 
         [HttpPost] //Use when send data through form
         [ValidateAntiForgeryToken]//Use with any form, for prevent any external tool or app 
                                   //from accessing that form
-        public IActionResult Edit([FromRoute] int id, Employee model)
+        public IActionResult Edit([FromRoute] int id, CreateEmployeeDtos model)
         {
             if (ModelState.IsValid) //ServerSide Validation To Props Inside CreateDepartmentDtos Class
             {
-                if (id != model.Id) return BadRequest();//Error 400
-                var count = _repository.Update(model);
+                //if (id != model.Id) return BadRequest();//Error 400
+                var employee = new Employee() //Casting Model From "CreateDepartmentDtos" class To "Department" class 
+                {                                 //for save date of "model" in Our Database
+                    Id = id,
+                    Name = model.Name,
+                    Age = model.Age,
+                    Salary = model.Salary,
+                    Address = model.Address,
+                    Email = model.Email,
+                    Phone = model.Phone,
+                    HiringDate = model.HiringDate,
+                    CreateAt = model.CreateAt,
+                    IsActive = model.IsActive,
+                    IsDeleted = model.IsDeleted,
+
+                };
+                var count = _repository.Update(employee);
                 if (count > 0) //if saved data of "model" in our database, the "Add" fun will increase
                                //one, is returned to index 
                 {
