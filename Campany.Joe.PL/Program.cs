@@ -14,6 +14,7 @@ namespace Campany.Joe.PL
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>(); //Allow DI For DepartmentRepository
+            builder.Services.AddScoped<IEmployeeRepository,EmployeeRepository>(); //Allow DI For DepartmentRepository
             builder.Services.AddDbContext<CampanyDbContext>(option =>
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

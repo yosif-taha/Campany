@@ -11,7 +11,7 @@ namespace Company.BLL.Repositories
 {
     public class EmployeeRepository : GenericRepository<Employee>, IEmployeeRepository
     {
-        public EmployeeRepository(CampanyDbContext context) : base(context)
+        public EmployeeRepository(CampanyDbContext context) : base(context) //ASK CLR to create Object From CampanyDbContext 
         {
         }
     }
