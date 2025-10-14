@@ -16,8 +16,8 @@ namespace Company.DAL.Models
         public decimal Salary { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
-        public DateOnly HiringDate { get; set; }
-        public DateOnly CreateAt { get; set; }
+        public DateTime HiringDate { get; set; }
+        public DateTime CreateAt { get; set; }
 
 
     }

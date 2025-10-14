@@ -12,8 +12,8 @@ namespace Company.BLL.Repositories
 {
     public class DepartmentRepository : GenericRepository<Department>, IDepartmentRepository
     {
-        //readonly: for connect with DB Only Once
-        public DepartmentRepository(CampanyDbContext context) : base(context)
+        
+        public DepartmentRepository(CampanyDbContext context) : base(context) //ASK CLR to create Object From CampanyDbContext 
         {
         }
     }
