@@ -9,9 +9,9 @@
 <br />
 
 
-<form asp-action="Edit">
+<form asp-action="Edit" enctype="multipart/form-data">   @*  enctype="multipart/form-data:- For Upload File(image) *@
     <partial name="EmployeePartialViews/_CreateEditPartialView" />
-
+    <input asp-for="ImageName" hidden /> @* for update image *@
     <div>
         <input type="submit" value="Save" class="btn btn-warning" />
         <a asp-action="Index" class="btn btn-light">Back To List</a>

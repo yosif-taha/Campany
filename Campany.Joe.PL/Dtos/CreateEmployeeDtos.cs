@@ -24,5 +24,10 @@ namespace Campany.Joe.PL.Dtos
         public DateTime HiringDate { get; set; }
         [DisplayName("Date Of Create")]
         public DateTime CreateAt { get; set; }
+        public int? DepartmentId { get; set; }
+
+        public IFormFile? Image { get; set; }
+        public string? ImageName { get; set; }
+
     }
 }
