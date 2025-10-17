@@ -1,54 +1,75 @@
-﻿using Campany.Joe.PL.Dtos;
+﻿using AutoMapper;
+using Campany.Joe.PL.Dtos;
+using Campany.Joe.PL.Helpers;
 using Company.BLL.Interfaces;
 using Company.DAL.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
+using System.Threading.Tasks;
 
 namespace Campany.Joe.PL.Controllers
 {
     public class EmployeeController : Controller
     {
-        IEmployeeRepository _repository;
-        public EmployeeController(IEmployeeRepository repository)
+        private readonly IUnitOfWork _unitOfWork;
+
+        //IEmployeeRepository _employeerepository;
+        //IDepartmentRepository _departmentRepository;
+        private readonly IMapper _mapper;
+
+        public EmployeeController(
+            //IEmployeeRepository repository,
+            //  IDepartmentRepository departmentRepository,
+            IUnitOfWork unitOfWork,
+              IMapper mapper
+            )
         {
-            _repository = repository;
+            _unitOfWork = unitOfWork;
+            //_employeerepository = repository;
+            //_departmentRepository = departmentRepository;
+            _mapper = mapper;
         }
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string? SearchInput)
         {
-
-            var employee = _repository.GetAll();
+            IEnumerable<Employee> employee;
+            if (string.IsNullOrEmpty(SearchInput))
+            {
+                employee = await _unitOfWork.EmployeeRepository.GetAllAsync();
+            }
+            else
+            {
+                employee = await _unitOfWork.EmployeeRepository.GetNameAsync(SearchInput);
+            }
             return View(employee);
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var department = await _unitOfWork.DepartmentRepository.GetAllAsync();
+            ViewData["department"] = department;
             return View();
         }
         [HttpPost] //Use when send data through form
-        public IActionResult Create(CreateEmployeeDtos model)
+        public async Task<IActionResult> Create(CreateEmployeeDtos model)
         {
+
             if (ModelState.IsValid) //ServerSide Validation To Props Inside CreateEmployeeDtos Class
             {
-                var employee = new Employee() //Casting Model From "CreateDepartmentDtos" class To "Department" class 
-                {                                 //for save date of "model" in Our Database
-                   Name = model.Name,
-                   Age = model.Age,
-                   Salary = model.Salary,
-                   Address = model.Address,
-                   Email = model.Email,
-                   Phone = model.Phone,
-                   HiringDate = model.HiringDate,
-                   CreateAt = model.CreateAt,
-                   IsActive = model.IsActive,
-                   IsDeleted = model.IsDeleted,
+                if (model.Image is not null)
+                {
+                    model.ImageName = DeocumentSettings.UploadFile(model.Image, "images");
+                }
 
-                };
-
-                var count = _repository.Add(employee);
+                var employee = _mapper.Map<Employee>(model); //Casting Model From "CreateDepartmentDtos" class To "Department" class 
+                                                             //for save date of "model" in Our Database
+                await _unitOfWork.EmployeeRepository.Add(employee);
+                var count = await _unitOfWork.CompleteAsync();
                 if (count > 0) //if saved data of "model" in our database, the "Add" fun will increase
                                //one, is returned to index 
                 {
+                    TempData["Message"] = "Employee Is Created !!";
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -56,62 +77,52 @@ namespace Campany.Joe.PL.Controllers
 
         }
         [HttpGet]
-        public IActionResult Details(int? id, string ViewName)
+        public async Task<IActionResult> Details(int? id, string ViewName)
         {
             if (id == null) return BadRequest("Invalid Id");
-            var employee = _repository.Get(id.Value);
+            var employee = await _unitOfWork.EmployeeRepository.GetAsync(id.Value);
             if (employee is null) return NotFound(new { StatusCode = 400, Message = $"Department With Id {id} Is Not Found" });
             return View(ViewName, employee);
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
+            var department = await _unitOfWork.DepartmentRepository.GetAllAsync();
+            ViewData["department"] = department;
             if (id == null) return BadRequest("Invalid Id");
-            var employee = _repository.Get(id.Value);
+            var employee = await _unitOfWork.EmployeeRepository.GetAsync(id.Value);
             if (employee is null) return NotFound(new { StatusCode = 400, Message = $"Department With Id {id} Is Not Found" });
-            var employeeDto = new CreateEmployeeDtos() //Casting Model From "CreateDepartmentDtos" class To "Department" class 
-            {                                 //for save date of "model" in Our Database
-               
-                Name = employee.Name,
-                Age = employee.Age,
-                Salary = employee.Salary,
-                Address = employee.Address,
-                Email = employee.Email,
-                Phone = employee.Phone,
-                HiringDate = employee.HiringDate,
-                CreateAt = employee.CreateAt,
-                IsActive = employee.IsActive,
-                IsDeleted = employee.IsDeleted,
 
-            };
+            var employeeDto = _mapper.Map<CreateEmployeeDtos>(employee); //Casting Model From "CreateDepartmentDtos" class To "Department" class 
+                                                                         //for save date of "model" in Our Database, USing auto Mapper.
+
             return View(employeeDto);
         }
 
         [HttpPost] //Use when send data through form
         [ValidateAntiForgeryToken]//Use with any form, for prevent any external tool or app 
                                   //from accessing that form
-        public IActionResult Edit([FromRoute] int id, CreateEmployeeDtos model)
+        public async Task<IActionResult> Edit([FromRoute] int id, CreateEmployeeDtos model)
         {
             if (ModelState.IsValid) //ServerSide Validation To Props Inside CreateDepartmentDtos Class
             {
-                //if (id != model.Id) return BadRequest();//Error 400
-                var employee = new Employee() //Casting Model From "CreateDepartmentDtos" class To "Department" class 
-                {                                 //for save date of "model" in Our Database
-                    Id = id,
-                    Name = model.Name,
-                    Age = model.Age,
-                    Salary = model.Salary,
-                    Address = model.Address,
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    HiringDate = model.HiringDate,
-                    CreateAt = model.CreateAt,
-                    IsActive = model.IsActive,
-                    IsDeleted = model.IsDeleted,
+                if (model.Image is not null && model.ImageName is not null)
+                {
+                    DeocumentSettings.DeleteFile(model.ImageName, "images");
+                }
+                if (model.Image is not null )
+                {
+                  model.ImageName=  DeocumentSettings.UploadFile(model.Image, "images");
+                }
 
-                };
-                var count = _repository.Update(employee);
+
+                var employee = _mapper.Map<Employee>(model);  //Casting Model From "CreateDepartmentDtos" class To "Department" class 
+                                                      //for save date of "model" in Our Database
+                 employee.Id = id;
+                _unitOfWork.EmployeeRepository.Update(employee);
+                var count = await _unitOfWork.CompleteAsync();
+
                 if (count > 0) //if saved data of "model" in our database, the "Add" fun will increase
                                //one, is returned to index 
                 {
@@ -121,10 +132,10 @@ namespace Campany.Joe.PL.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult Delete(int? id)
+        public Task<IActionResult> Delete(int? id)
         {
             //if (id == null) return BadRequest("Invalid Id");
-            //var department = _repository.Get(id.Value);
+            //var department = _employeerepository.Get(id.Value);
             //if (department is null) return NotFound(new { StatusCode = 400, Message = $"Department With Id {id} Is Not Found" });
 
             return Details(id, "Delete");
@@ -132,15 +143,22 @@ namespace Campany.Joe.PL.Controllers
         [HttpPost] //Use when send data through form
         [ValidateAntiForgeryToken]//Use with any form, for prevent any external tool or app 
                                   //from accessing that form
-        public IActionResult Delete([FromRoute] int id, Employee model)
+        public async Task<IActionResult> Delete([FromRoute] int id, CreateEmployeeDtos model)
         {
             if (ModelState.IsValid) //ServerSide Validation To Props Inside CreateDepartmentDtos Class
             {
-                if (id != model.Id) return BadRequest();//Error 400
-                var count = _repository.Delete(model);
+               var employee = _mapper.Map<Employee>(model);
+                employee.Id = id;
+                _unitOfWork.EmployeeRepository.Delete(employee);
+                var count = await _unitOfWork.CompleteAsync();
+
                 if (count > 0) //if saved data of "model" in our database, the "Add" fun will increase
                                //one, is returned to index 
                 {
+                    if(model.ImageName is not null)
+                    {
+                        DeocumentSettings.DeleteFile(model.ImageName,"images");
+                    }
                     return RedirectToAction(nameof(Index));
                 }
             }

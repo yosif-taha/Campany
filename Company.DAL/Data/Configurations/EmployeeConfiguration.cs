@@ -14,6 +14,10 @@ namespace Company.DAL.Data.Configurations
         public void Configure(EntityTypeBuilder<Employee> builder)
         {
             builder.Property(E=>E.Salary).HasColumnType("decimal(18,2)");
+            builder.HasOne(E => E.Department)
+                    .WithMany(D => D.employees)
+                    .HasForeignKey(E => E.DepartmentId)
+                    .OnDelete(DeleteBehavior.SetNull);// when delete any department set departmentId = Null not remove this employe, but departmentId must Nullable.
         }
     }
 }

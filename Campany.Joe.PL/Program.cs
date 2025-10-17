@@ -1,4 +1,6 @@
+using Campany.Joe.PL.Mapping;
 using Company.BLL.Interfaces;
+using Company.BLL;
 using Company.BLL.Repositories;
 using Company.DAL.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -13,14 +15,17 @@ namespace Campany.Joe.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>(); //Allow DI For DepartmentRepository
-            builder.Services.AddScoped<IEmployeeRepository,EmployeeRepository>(); //Allow DI For DepartmentRepository
+            //builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>(); //Allow DI For DepartmentRepository
+            //builder.Services.AddScoped<IEmployeeRepository,EmployeeRepository>(); //Allow DI For DepartmentRepository
+            builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();  //Allow DI For UnitOfWork
+
             builder.Services.AddDbContext<CampanyDbContext>(option =>
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             }
             );// Allow DI For CampanyDbContext
 
+            builder.Services.AddAutoMapper(E => E.AddProfile(new EmployeeProfile()));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

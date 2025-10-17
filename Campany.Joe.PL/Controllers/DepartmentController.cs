@@ -7,22 +7,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Identity.Client;
+using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Campany.Joe.PL.Controllers
 {
     public class DepartmentController : Controller
     {
-        IDepartmentRepository _repository;
-        public DepartmentController(IDepartmentRepository repository)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public DepartmentController(IUnitOfWork unitOfWork)
         {
-            _repository = repository;
+            _unitOfWork = unitOfWork;
         }
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             
-           var department= _repository.GetAll();
+           var department= await _unitOfWork.DepartmentRepository.GetAllAsync();
             return View(department);
         }
 
@@ -32,7 +34,7 @@ namespace Campany.Joe.PL.Controllers
            return View();   
         }
         [HttpPost] //Use when send data through form
-        public IActionResult Create(CreateDepartmentDtos model)
+        public async Task<IActionResult> Create(CreateDepartmentDtos model)
         {
             if(ModelState.IsValid) //ServerSide Validation To Props Inside CreateDepartmentDtos Class
             {
@@ -44,8 +46,10 @@ namespace Campany.Joe.PL.Controllers
 
                 };
 
-              var count=  _repository.Add(department);
-                if(count>0) //if saved data of "model" in our database, the "Add" fun will increase
+               await _unitOfWork.DepartmentRepository.Add(department);
+                var count = await _unitOfWork.CompleteAsync();
+
+                if (count>0) //if saved data of "model" in our database, the "Add" fun will increase
                             //one, is returned to index 
                 {
                     return RedirectToAction(nameof(Index));
@@ -55,19 +59,19 @@ namespace Campany.Joe.PL.Controllers
    
         }
         [HttpGet]
-        public IActionResult Details(int? id,string ViewName)
+        public async Task<IActionResult> Details(int? id,string ViewName)
         {
             if (id == null) return BadRequest("Invalid Id");
-           var department= _repository.Get(id.Value);
+           var department= await _unitOfWork.DepartmentRepository.GetAsync(id.Value);
             if (department is null) return NotFound(new {StatusCode=400,Message=$"Department With Id {id} Is Not Found" });
             return View(ViewName,department);
         }
 
         [HttpGet]
-        public IActionResult Edit( int? id)
+        public async Task<IActionResult> Edit( int? id)
         {
             if (id == null) return BadRequest("Invalid Id");
-            var department = _repository.Get(id.Value);
+            var department = await _unitOfWork.DepartmentRepository.GetAsync(id.Value);
             if (department is null) return NotFound(new { StatusCode = 400, Message = $"Department With Id {id} Is Not Found" });
             var departmentDto = new CreateDepartmentDtos() //Casting Model From "CreateDepartmentDtos" class To "Department" class 
             {                                 //for save date of "model" in Our Database
@@ -82,7 +86,7 @@ namespace Campany.Joe.PL.Controllers
         [HttpPost] //Use when send data through form
         [ValidateAntiForgeryToken]//Use with any form, for prevent any external tool or app 
                                   //from accessing that form
-        public IActionResult Edit([FromRoute] int id,CreateDepartmentDtos model)
+        public async Task<IActionResult> Edit([FromRoute] int id,CreateDepartmentDtos model)
         {
             if (ModelState.IsValid) //ServerSide Validation To Props Inside CreateDepartmentDtos Class
             {
@@ -95,7 +99,9 @@ namespace Campany.Joe.PL.Controllers
 
                 };
                 //if (id!=model.Id) return BadRequest();//Error 400
-                var count = _repository.Update(department);
+               _unitOfWork.DepartmentRepository.Update(department);
+                var count = await _unitOfWork.CompleteAsync();
+
                 if (count > 0) //if saved data of "model" in our database, the "Add" fun will increase
                                //one, is returned to index 
                 {
@@ -105,7 +111,7 @@ namespace Campany.Joe.PL.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult Delete(int? id)
+        public Task<IActionResult> Delete(int? id)
         {
             //if (id == null) return BadRequest("Invalid Id");
             //var department = _repository.Get(id.Value);
@@ -116,12 +122,15 @@ namespace Campany.Joe.PL.Controllers
         [HttpPost] //Use when send data through form
         [ValidateAntiForgeryToken]//Use with any form, for prevent any external tool or app 
                                   //from accessing that form
-        public IActionResult Delete([FromRoute] int id, Department model)
+        public async Task<IActionResult> Delete([FromRoute] int id, Department model)
         {
             if (ModelState.IsValid) //ServerSide Validation To Props Inside CreateDepartmentDtos Class
             {
                 if (id != model.Id) return BadRequest();//Error 400
-                var count = _repository.Delete(model);
+                model.Id = id;  
+                _unitOfWork.DepartmentRepository.Delete(model);
+                var count = await _unitOfWork.CompleteAsync();
+
                 if (count > 0) //if saved data of "model" in our database, the "Add" fun will increase
                                //one, is returned to index 
                 {

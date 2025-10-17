@@ -13,7 +13,7 @@ namespace Company.DAL.Data.Configirations
     {
         public void Configure(EntityTypeBuilder<Department> builder)
         {
-            builder.Property(I=>I.Id).UseIdentityColumn(10,10);
+            builder.Property(I=>I.Id).UseIdentityColumn(10,10);          
         }
     }
 }
