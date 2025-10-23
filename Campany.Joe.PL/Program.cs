@@ -4,6 +4,8 @@ using Company.BLL;
 using Company.BLL.Repositories;
 using Company.DAL.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Company.DAL.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Campany.Joe.PL
 {
@@ -26,6 +28,14 @@ namespace Campany.Joe.PL
             );// Allow DI For CampanyDbContext
 
             builder.Services.AddAutoMapper(E => E.AddProfile(new EmployeeProfile()));
+           
+            builder.Services.AddIdentity<AppUser,IdentityRole>()//<AppUser,IdentityRole> because must use user + role 
+                .AddEntityFrameworkStores<CampanyDbContext>() //use this line because constructor of ussermanager class inject object from Istorerole 
+                .AddDefaultTokenProviders(); //AddDefaultTokenProviders:- this services used to generate taken in reset password
+            builder.Services.ConfigureApplicationCookie(config =>
+            {
+                config.LoginPath = "/Account/SignIn";    //use this fuction to change login path from default ("/Account/LogIn") To signin page ("/Account/SignIn")
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -41,8 +51,8 @@ namespace Campany.Joe.PL
 
             app.UseRouting();
 
-
-
+            app.UseAuthentication(); //Implement middleware of Authentication
+            app.UseAuthorization(); //Implement middleware of Authorization
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");

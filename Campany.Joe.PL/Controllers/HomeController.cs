@@ -1,9 +1,11 @@
 using System.Diagnostics;
 using Campany.Joe.PL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Campany.Joe.PL.Controllers
 {
+    [Authorize] //this attribute for stop access to this controller
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

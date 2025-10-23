@@ -2,6 +2,7 @@
 using Company.BLL.Interfaces;
 using Company.BLL.Repositories;
 using Company.DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
@@ -12,6 +13,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Campany.Joe.PL.Controllers
 {
+    [Authorize]
     public class DepartmentController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -92,11 +94,10 @@ namespace Campany.Joe.PL.Controllers
             {
                 var department = new Department() //Casting Model From "CreateDepartmentDtos" class To "Department" class 
                 {                                 //for save date of "model" in Our Database
-                    Id=id,
+                    Id = id,
                     Code = model.Code,
                     Name = model.Name,
                     CreateAt = model.CreateAt
-
                 };
                 //if (id!=model.Id) return BadRequest();//Error 400
                _unitOfWork.DepartmentRepository.Update(department);
