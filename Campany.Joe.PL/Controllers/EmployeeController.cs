@@ -3,12 +3,14 @@ using Campany.Joe.PL.Dtos;
 using Campany.Joe.PL.Helpers;
 using Company.BLL.Interfaces;
 using Company.DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing;
 using System.Threading.Tasks;
 
 namespace Campany.Joe.PL.Controllers
 {
+    [Authorize]
     public class EmployeeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
