@@ -83,7 +83,7 @@ namespace Campany.Joe.PL.Controllers
         {
             if (id == null) return BadRequest("Invalid Id");
             var employee = await _unitOfWork.EmployeeRepository.GetAsync(id.Value);
-            if (employee is null) return NotFound(new { StatusCode = 400, Message = $"Department With Id {id} Is Not Found" });
+            if (employee is null) return NotFound(new { StatusCode = 400, Message = $"Employee With Id {id} Is Not Found" });
             return View(ViewName, employee);
         }
 
