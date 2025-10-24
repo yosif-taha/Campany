@@ -1,0 +1,25 @@
+﻿@model UsrToReturnDto
+
+
+
+<div class="my-3">
+    <label asp-for="UserName" class="col-form-label"></label>
+    <input asp-for="UserName" class="form-control" />
+    <span asp-validation-for="UserName"></span>  @*Return Inside Of ErrorMessage*@
+</div>
+<div class="my-3">
+    <label asp-for="FirstName" class="col-form-label"></label>
+    <input asp-for="FirstName" class="form-control" />
+    <span asp-validation-for="FirstName"></span> @*Return Inside Of ErrorMessage*@
+</div>
+<div class="my-3">
+    <label asp-for="LastName" class="col-form-label"></label>
+    <input asp-for="LastName" class="form-control" />
+    <span asp-validation-for="LastName"></span> @*Return Inside Of ErrorMessage*@
+</div>
+<div class="my-3">
+    <label asp-for="Email" class="col-form-label"></label>
+    <input asp-for="Email" class="form-control" />
+    <span asp-validation-for="Email"></span> @*Return Inside Of ErrorMessage*@
+</div>
+

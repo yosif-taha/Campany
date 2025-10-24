@@ -29,7 +29,7 @@
                     <td>@item.Code</td>
                     <td>@item.Name</td>
                     <td>@item.CreateAt</td>
-                    <partial name="_IndexEmployeeDepartmentPartialView" model="@item.Id" />
+                    <partial name="_IndexEmployeeDepartmentPartialView" model="@item.Id.ToString()" />
 
                 </tr>
             }

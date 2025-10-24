@@ -77,7 +77,7 @@
                         <td>No Department</td>
                     }else{<td>@item.Department.Name</td>}
 
-                    <partial name="_IndexEmployeeDepartmentPartialView" model="@item.Id" />
+                    <partial name="_IndexEmployeeDepartmentPartialView" model="@item.Id.ToString()" />
 
 
                 </tr>
