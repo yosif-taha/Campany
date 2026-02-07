@@ -65,7 +65,63 @@ Company.Joe/
  │  │   ├─ EmployeeRepository.cs
  │  │   └─ DepartmentRepository.cs
  │  └─ UnitOfWork.cs (if used)
- │
- └─ CompanyManagementSystem.Services/ # Business logic layer
+ └─
+---
+
+🗝️ Key Features (Examples)
+
+Authentication
+
+Login / Logout
+
+Role-based authorization for admin features
+
+Employees
+
+GET /Employees — list all employees
+
+GET /Employees/Details/{id} — view employee details
+
+GET /Employees/Create — create new employee
+
+POST /Employees/Create
+
+GET /Employees/Edit/{id}
+
+POST /Employees/Edit/{id}
+
+POST /Employees/Delete/{id}
+
+Departments
+
+GET /Departments — list all departments
+
+GET /Departments/Details/{id} — view department details + employees
+
+GET /Departments/Create
+
+POST /Departments/Create
+
+GET /Departments/Edit/{id}
+
+POST /Departments/Edit/{id}
+
+POST /Departments/Delete/{id}
+
+🧪 Tech Stack
+
+ASP.NET MVC
+
+Entity Framework Core
+
+SQL Server
+
+Razor Views
+
+Bootstrap / CSS (for UI, if used)
+
+AutoMapper (if used)
+
+Authentication & Authorization (ASP.NET Identity or custom)
     ├─ EmployeeService.cs
     └─ DepartmentService.cs
