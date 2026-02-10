@@ -66,9 +66,10 @@ Company.Joe/
  │  │   └─ DepartmentRepository.cs
  │  └─ UnitOfWork.cs (if used)
  └─
+```
 ---
 
-## 🗝️ Key Features (Examples)
+## 🗝️  Key Features (Examples)
 
 Authentication
 
