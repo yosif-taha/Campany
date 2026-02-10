@@ -125,3 +125,12 @@ AutoMapper (if used)
 Authentication & Authorization (ASP.NET Identity or custom)
     ├─ EmployeeService.cs
     └─ DepartmentService.cs
+---
+
+## 👨‍💻 Author
+
+**Youssef Taha**  
+- 📧 Email: yousif.t.abdulwahab@gmail.com 
+- 🔗 [LinkedIn](https://www.linkedin.com/in/yousif-taha-89454922b/)  
+- 🔗 [GitHub](https://github.com/yosif-taha)  
+---
