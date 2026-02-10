@@ -68,7 +68,7 @@ Company.Joe/
  └─
 ---
 
-🗝️ Key Features (Examples)
+## 🗝️ Key Features (Examples)
 
 Authentication
 
@@ -107,8 +107,9 @@ GET /Departments/Edit/{id}
 POST /Departments/Edit/{id}
 
 POST /Departments/Delete/{id}
+---
 
-🧪 Tech Stack
+## 🧪 Tech Stack
 
 ASP.NET MVC
 
