@@ -108,7 +108,7 @@ GET /Departments/Edit/{id}
 POST /Departments/Edit/{id}
 
 POST /Departments/Delete/{id}
----
+
 
 ## 🧪 Tech Stack
 
@@ -127,7 +127,7 @@ AutoMapper (if used)
 Authentication & Authorization (ASP.NET Identity or custom)
     ├─ EmployeeService.cs
     └─ DepartmentService.cs
----
+
 
 ## 👨‍💻 Author
 
